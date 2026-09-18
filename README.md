@@ -2,7 +2,11 @@
 
 [English](README.en.md)
 
-Windows 平台的 Markdown 预览应用，基于 [Tauri 2](https://tauri.app/) 构建。它是 macOS 应用 [Markdown Preview](../markdown-preview) 的移植版：打开 `.md` 文件 → 渲染预览 → 导出 PDF。
+Windows 平台的 Markdown 预览应用，基于 [Tauri 2](https://tauri.app/) 构建。它是 macOS 应用 Markdown Preview 的移植版：打开 `.md` 文件 → 渲染预览 → 导出 PDF。
+
+- 上游原始仓库：[pluk-inc/markdown-preview](https://github.com/pluk-inc/markdown-preview)（macOS 原生应用，Swift/AppKit/WKWebView）
+- 作者的 fork（对照用）：[ahbencat/markdown-preview](https://github.com/ahbencat/markdown-preview)
+- 本仓库为独立重写的新项目，与上游无 fork 关系，详见[致谢](#致谢)
 
 <p>
   <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%2010%2F11-blue" />

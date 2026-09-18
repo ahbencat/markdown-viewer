@@ -2,7 +2,11 @@
 
 [中文](README.md)
 
-A Markdown preview app for Windows, built with [Tauri 2](https://tauri.app/). It is a port of the macOS app [Markdown Preview](../markdown-preview): open a `.md` file → render a preview → export PDF.
+A Markdown preview app for Windows, built with [Tauri 2](https://tauri.app/). It is a port of the macOS Markdown Preview app: open a `.md` file → render a preview → export PDF.
+
+- Upstream original: [pluk-inc/markdown-preview](https://github.com/pluk-inc/markdown-preview) (native macOS app, Swift/AppKit/WKWebView)
+- Author's fork (reference only): [ahbencat/markdown-preview](https://github.com/ahbencat/markdown-preview)
+- This repo is an independent rewrite, not a fork of upstream — see [Credits](#credits)
 
 <p>
   <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%2010%2F11-blue" />
