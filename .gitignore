@@ -1,0 +1,24 @@
+# dependencies
+node_modules/
+
+# builds
+dist/
+dist-ssr/
+*.local
+
+# tauri
+src-tauri/target/
+src-tauri/gen/
+
+# logs / editor
+*.log
+npm-debug.log*
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# env / secrets
+.env
+.env.*
+!.env.example

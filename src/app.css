@@ -1,0 +1,164 @@
+/* MVP app chrome. The document stylesheet (ported from
+ * MarkdownHTML+Stylesheet.swift) lives in renderer/stylesheet.ts and is
+ * injected separately so it can be tested without React. */
+
+:root {
+  color-scheme: light dark;
+  --mdp-bg: #ffffff;
+  --mdp-fg: #1a1a1a;
+  --mdp-toolbar-bg: #f3f3f3;
+  --mdp-border: #d4d4d4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --mdp-bg: #1e1e1e;
+    --mdp-fg: #e8e8e8;
+    --mdp-toolbar-bg: #2d2d2d;
+    --mdp-border: #454545;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: "Segoe UI", system-ui, sans-serif;
+  background: var(--mdp-bg);
+  color: var(--mdp-fg);
+}
+
+.mdp-app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mdp-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  background: var(--mdp-toolbar-bg);
+  border-bottom: 1px solid var(--mdp-border);
+}
+
+.mdp-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.mdp-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.mdp-actions button {
+  font: inherit;
+  font-size: 13px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+.mdp-actions button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.mdp-error {
+  padding: 8px 12px;
+  background: #fdecea;
+  color: #611a15;
+  border-bottom: 1px solid #f5c6cb;
+  font-size: 13px;
+  white-space: pre-wrap;
+}
+
+.mdp-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 24px;
+  text-align: center;
+}
+
+.mdp-samples {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.mdp-samples button {
+  font: inherit;
+  font-size: 13px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+.mdp-hint {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.mdp-preview {
+  flex: 1;
+  overflow: auto;
+  padding: 24px 32px;
+}
+
+.mdp-preview .markdown-body {
+  max-width: 820px;
+  margin: 0 auto;
+}
+
+.mdp-rendering {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-bottom: 8px;
+}
+
+/* ---- print: force light, hide screen-only chrome, keep blocks intact ---- */
+@media print {
+  .mdp-toolbar,
+  .mdp-error,
+  .mdp-rendering,
+  .mermaid-hud {
+    display: none !important;
+  }
+
+  .mdp-preview {
+    overflow: visible;
+    padding: 0;
+  }
+
+  .mdp-preview .markdown-body {
+    max-width: none;
+  }
+
+  pre,
+  table,
+  figure,
+  section.footnotes {
+    break-inside: avoid;
+  }
+}
