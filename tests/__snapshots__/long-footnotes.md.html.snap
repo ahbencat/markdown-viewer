@@ -1,0 +1,107 @@
+<h1 id="md-heading-0">Long Footnote Jump Test</h1>
+<p>Use this file to test whether footnote references jump to the footnote section
+and whether backlinks return to the original reference on a long page.</p>
+<h2 id="md-heading-1">Section 1</h2>
+<p>This opening section has the first footnote reference.<sup class="footnote-ref"><a id="fnref-1" href="#fn-1" aria-label="Footnote 1">1</a></sup> Clicking it
+should jump near the bottom of the document.</p>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a
+ante venenatis dapibus posuere velit aliquet. Donec ullamcorper nulla non metus
+auctor fringilla.</p>
+<p>Curabitur blandit tempus porttitor. Maecenas faucibus mollis interdum. Etiam
+porta sem malesuada magna mollis euismod. Vestibulum id ligula porta felis
+euismod semper.</p>
+<h2 id="md-heading-2">Section 2</h2>
+<p>This section intentionally has no footnotes. It gives the page enough height to
+make anchor jumps obvious.</p>
+<ul>
+<li>Item one has enough text to wrap on narrower windows and make the page taller.</li>
+<li>Item two should remain ordinary Markdown content.</li>
+<li>Item three gives the list a little more vertical weight.</li>
+</ul>
+<p>Sed posuere consectetur est at lobortis. Aenean lacinia bibendum nulla sed
+consectetur. Cras justo odio, dapibus ac facilisis in, egestas eget quam.</p>
+<h2 id="md-heading-3">Section 3</h2>
+<p>A second footnote appears here.<sup class="footnote-ref"><a id="fnref-2" href="#fn-2" aria-label="Footnote 2">2</a></sup> After clicking it, use the backlink in
+the footnote section to confirm it returns to this exact part of the page.</p>
+<pre><code class="language-swift">let literalFootnoteMarker = &quot;[^middle]&quot;
+print(literalFootnoteMarker)
+</code></pre>
+<p>The marker inside the code block above should not become a footnote link.</p>
+<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Morbi leo
+risus, porta ac consectetur ac, vestibulum at eros.</p>
+<h2 id="md-heading-4">Section 4</h2>
+<p>More filler content follows. Scroll position should move clearly when you click
+footnote links from this document.</p>
+<p>Donec sed odio dui. Nulla vitae elit libero, a pharetra augue. Integer posuere
+erat a ante venenatis dapibus posuere velit aliquet.</p>
+<p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Fusce
+dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+<h2 id="md-heading-5">Section 5</h2>
+<p>This section references the same footnote twice.<sup class="footnote-ref"><a id="fnref-3" href="#fn-3" aria-label="Footnote 3">3</a></sup> The first backlink
+should return here, and the second backlink should return to the next paragraph.</p>
+<p>Here is the second reference to the same footnote.<sup class="footnote-ref"><a id="fnref-3-2" href="#fn-3" aria-label="Footnote 3">3</a></sup> It should create
+a second inline backlink in the footnote definition.</p>
+<p><code>[^repeat-long]</code> inside inline code should stay literal.</p>
+<h2 id="md-heading-6">Section 6</h2>
+<p>This is another spacer section.</p>
+<ol>
+<li>Ordered list item one.</li>
+<li>Ordered list item two.</li>
+<li>Ordered list item three.</li>
+<li>Ordered list item four.</li>
+</ol>
+<p>Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean
+imperdiet. Etiam ultricies nisi vel augue.</p>
+<h2 id="md-heading-7">Section 7</h2>
+<p>A multiline footnote reference lives here.<sup class="footnote-ref"><a id="fnref-4" href="#fn-4" aria-label="Footnote 4">4</a></sup> Its definition includes
+multiple paragraphs and a nested list.</p>
+<p>Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus
+viverra nulla ut metus varius laoreet. Quisque rutrum.</p>
+<h2 id="md-heading-8">Section 8</h2>
+<p>More text to make the page long enough for jump testing.</p>
+<p>Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec
+odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus.</p>
+<p>Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo.
+Sed fringilla mauris sit amet nibh.</p>
+<h2 id="md-heading-9">Section 9</h2>
+<p>One final footnote appears near the end of the body.<sup class="footnote-ref"><a id="fnref-5" href="#fn-5" aria-label="Footnote 5">5</a></sup> This should still
+jump down, but the scroll distance will be shorter than the first reference.</p>
+<p>Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue
+velit cursus nunc, quis gravida magna mi a libero.</p>
+<h2 id="md-heading-10">Section 10</h2>
+<p>End of the long body. The footnote section should appear below this paragraph.</p>
+<p>Click each backlink arrow in the footnotes and confirm it returns to the matching
+reference location.</p>
+
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>First footnote. Use the backlink to confirm the page jumps back to
+Section 1. <span class="footnote-backrefs"><a href="#fnref-1" class="footnote-backref" aria-label="Back to reference 1">&#8617;</a></span></p>
+
+</li>
+<li id="fn-2">
+<p>Middle footnote with <strong>bold text</strong> and a <a href="https://md-preview.app">link</a>. <span class="footnote-backrefs"><a href="#fnref-2" class="footnote-backref" aria-label="Back to reference 2">&#8617;</a></span></p>
+
+</li>
+<li id="fn-3">
+<p>Repeated footnote. This should show two backlinks inline at the
+end of this definition. <span class="footnote-backrefs"><a href="#fnref-3" class="footnote-backref" aria-label="Back to reference 3">&#8617;</a> <a href="#fnref-3-2" class="footnote-backref" aria-label="Back to reference 3">&#8617;</a></span></p>
+
+</li>
+<li id="fn-4">
+<p>Multiline footnote first paragraph.</p>
+<p>Second paragraph in the same footnote. <span class="footnote-backrefs"><a href="#fnref-4" class="footnote-backref" aria-label="Back to reference 4">&#8617;</a></span></p>
+<ul>
+<li>Nested bullet one.</li>
+<li>Nested bullet two with inline math: <span class="math math-inline"><span class="math math-inline">a^2 + b^2 = c^2</span></span>.</li>
+</ul>
+
+</li>
+<li id="fn-5">
+<p>Footnote referenced near the end of the document. <span class="footnote-backrefs"><a href="#fnref-5" class="footnote-backref" aria-label="Back to reference 5">&#8617;</a></span></p>
+
+</li>
+</ol>
+</section>

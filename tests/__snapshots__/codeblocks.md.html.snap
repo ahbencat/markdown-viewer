@@ -1,0 +1,51 @@
+<h1 id="md-heading-0">Code Block Rendering Sample</h1>
+<p>This file exercises Shiki syntax highlighting for common fenced code blocks.
+Mermaid blocks should still render as diagrams instead of highlighted code.</p>
+<pre><code class="language-swift">import Foundation
+
+struct Release: Decodable {
+    let version: String
+    let publishedAt: Date
+}
+
+func newestRelease(from data: Data) throws -&gt; Release {
+    let decoder = JSONDecoder()
+    decoder.dateDecodingStrategy = .iso8601
+    return try decoder.decode(Release.self, from: data)
+}
+</code></pre>
+<pre><code class="language-javascript">const buttons = document.querySelectorAll('[data-action]')
+
+for (const button of buttons) {
+  button.addEventListener('click', () =&gt; {
+    console.log(`Running ${button.dataset.action}`)
+  })
+}
+</code></pre>
+<pre><code class="language-json">{
+  &quot;bundleId&quot;: &quot;doc.md-preview&quot;,
+  &quot;productName&quot;: &quot;Markdown Preview&quot;,
+  &quot;features&quot;: [&quot;math&quot;, &quot;mermaid&quot;, &quot;shiki&quot;]
+}
+</code></pre>
+<pre><code class="language-bash">./scripts/release.sh --version 0.0.2 --draft
+</code></pre>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+flowchart LR
+    Markdown --&gt; HTML
+    HTML --&gt; Preview
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>

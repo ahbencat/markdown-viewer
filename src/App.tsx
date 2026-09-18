@@ -1,10 +1,20 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { renderMarkdown } from "./renderer";
+import { detectLanguage, highlightLanguage, parseCodeFenceInfo } from "./renderer/highlight";
 import {
   isTauri,
   openMarkdownFile,
   readDroppedFile,
 } from "./platform/tauri";
+import {
+  ensureHighlight,
+  ensureKatex,
+  ensureMermaid,
+  ensurePurify,
+  highlightCode,
+  observeMermaidFigures,
+  renderMath,
+} from "./platform/vendor";
 import { exportPdf } from "./platform/print";
 import type { OpenedDocument } from "./types";
 
@@ -31,10 +41,61 @@ export function App() {
     setRendering(true);
     setError(null);
     try {
+      // DOMPurify first: nothing reaches innerHTML unsanitized.
+      await ensurePurify();
+      const purify = window.DOMPurify;
       const result = await renderMarkdown(markdown, {
         assetBaseHref: undefined,
+        purify: purify
+          ? { sanitize: (dirty, config) => purify.sanitize(dirty, config) }
+          : undefined,
       });
       setRendered(result.articleHTML);
+
+      // Heavy vendors load lazily, text first — then enhance.
+      const jobs: Promise<unknown>[] = [];
+      if (result.containsMath) {
+        jobs.push(
+          ensureKatex()
+            .then(() => renderMath())
+            .catch((err: unknown) => {
+              throw new Error(
+                `KaTeX failed: ${err instanceof Error ? err.message : String(err)}`,
+              );
+            }),
+        );
+      }
+      if (result.containsMermaid) {
+        jobs.push(
+          ensureMermaid()
+            .then(() => observeMermaidFigures())
+            .catch((err: unknown) => {
+              throw new Error(
+                `Mermaid failed: ${err instanceof Error ? err.message : String(err)}`,
+              );
+            }),
+        );
+      }
+      if (result.containsCode) {
+        jobs.push(
+          ensureHighlight()
+            .then(() =>
+              highlightCode((code, className) => {
+                const m = /language-([\w+-]+)/.exec(className);
+                if (m) return highlightLanguage(m[1].toLowerCase());
+                return detectLanguage(code);
+              }),
+            )
+            .catch(() => {
+              // Highlight failure is cosmetic — never fail the render.
+            }),
+        );
+      }
+      const settled = await Promise.allSettled(jobs);
+      const failed = settled.find((s) => s.status === "rejected") as
+        | PromiseRejectedResult
+        | undefined;
+      if (failed) setError(String(failed.reason));
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
@@ -88,12 +149,34 @@ export function App() {
     };
   }, [renderDoc]);
 
-  // Inject rendered article HTML (already sanitized by DOMPurify when a
-  // purify instance is wired; MVP dev path renders without it).
+  // Inject rendered article HTML (sanitized via DOMPurify in renderDoc).
+  // Vendor enhancement runs after paint via requestIdleCallback so the
+  // text is visible before KaTeX/Mermaid/highlight parse their bundles.
   useEffect(() => {
     if (articleRef.current) {
       articleRef.current.innerHTML = rendered;
+      if (rendered !== "") {
+        const enhance = () => {
+          renderMath();
+          highlightCode((code, className) => {
+            const m = /language-([\w+-]+)/.exec(className);
+            if (m) {
+              const info = parseCodeFenceInfo(m[1]);
+              return highlightLanguage(info.language);
+            }
+            return detectLanguage(code);
+          });
+          observeMermaidFigures();
+        };
+        if ("requestIdleCallback" in window) {
+          const id = window.requestIdleCallback(enhance, { timeout: 1000 });
+          return () => window.cancelIdleCallback(id);
+        }
+        const t = setTimeout(enhance, 0);
+        return () => clearTimeout(t);
+      }
     }
+    return undefined;
   }, [rendered]);
 
   const empty = doc === null;

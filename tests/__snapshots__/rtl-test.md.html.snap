@@ -1,0 +1,218 @@
+<h1 id="md-heading-0">RTL Test — ދިވެހި · العربية · עברית · English</h1>
+<p>A document for stress-testing right-to-left rendering, bidirectional runs,
+and mixed-script paragraphs in the preview.</p>
+<hr>
+<h2 id="md-heading-1">1. Pure Dhivehi paragraph</h2>
+<p dir="rtl">އައްސަލާމް ޢަލައިކުމް! މިއީ ކަނާތުން ވާތަށް ލިޔުމުގެ ޓެސްޓު ކުރުމަށް
+ހަދާފައިވާ ލިޔުމެކެވެ. ދިވެހި ބަސް ތާނަ އަކުރުން ލިޔެވެއެވެ. މި ލިޔުމުގެ
+މަޤްޞަދަކީ ތާނަ އަކުރުތައް ރަނގަޅަށް ދައްކާތޯ ބެލުމެވެ.</p>
+<p dir="rtl">މިއީ ދެވަނަ ޕެރެގްރާފެކެވެ. ޖުމްލަތަކުގެ ދޭތެރޭ ހުންނަ ޖާގަ، ތިރި ތިރިއަށް
+ހުންނަ ސަފުތަކުގެ ދޭތެރޭ ހުންނަ ޖާގަ، އަދި ހާސިޔާ ރަނގަޅުތޯ ޓެސްޓު
+ކުރުމަށެވެ.</p>
+<h2 id="md-heading-2">2. Pure Arabic paragraph</h2>
+<p dir="rtl">مرحبا بالعالم! هذا مستند لاختبار العرض من اليمين إلى اليسار. الهدف هو
+التحقق من أن النص يتدفق في الاتجاه الصحيح، وأن علامات الترقيم تلتصق
+بالكلمة الصحيحة، وأن علامات الاستفهام والفواصل لا تقفز إلى الجانب الخطأ.</p>
+<p dir="rtl">فقرة ثانية لنرى التباعد بين الأسطر وما إذا كانت الهوامش تبدو صحيحة عند
+وجود عدة أسطر متتالية.</p>
+<h2 id="md-heading-3">3. Pure Hebrew paragraph</h2>
+<p dir="rtl">שלום עולם! זהו מסמך לבדיקה של תצוגה מימין לשמאל. המטרה היא לוודא שהטקסט
+זורם בכיוון הנכון, שהפיסוק נצמד למילה הנכונה, ושסימני שאלה ופסיקים לא
+קופצים לצד הלא נכון. האם זה עובד? כן, אני מקווה שכן.</p>
+<p dir="rtl">הנה פסקה שנייה כדי לראות את המרווחים בין שורות והאם השוליים נראים נכון
+כאשר יש כמה שורות זו אחר זו.</p>
+<h2 id="md-heading-4">4. Mixed bidi within a single paragraph</h2>
+<p>This English sentence has a Dhivehi name އަޙްމަދު, an Arabic name محمد,
+and a Hebrew name דָּוִד inside it, followed by a number 12345 and a
+parenthetical (with English) and (ދިވެހި ތެރޭ) and (مع العربية) and
+(עם עברית) — punctuation should hug the right side of each run.</p>
+<p dir="rtl">މިއީ ދިވެހި ޕެރެގްރާފެކެވެ، &quot;Swift&quot; ބަސް އާއި 77 ނަންބަރު އަދި <code>inline code</code>
+މެދުގައި ހިމެނޭ، އަދި ސުވާލަކުން ނިމޭ: ހުރިހާ ކަމެއް ރަނގަޅުތަ؟</p>
+<p dir="rtl">هذه فقرة عربية تحتوي على كلمة &quot;TypeScript&quot; ورقم 99 وعبارة <code>inline code</code>
+في المنتصف، وتنتهي بسؤال: هل كل شيء على ما يرام؟</p>
+<p dir="rtl">זוהי פסקה בעברית שמכילה את המילה &quot;JavaScript&quot; ואת המספר 42 ואת הביטוי
+<code>code snippet</code> באמצע, ונגמרת בשאלה: האם הכל תקין?</p>
+<h2 id="md-heading-5">5. Lists</h2>
+<h3 id="md-heading-6">Unordered (Dhivehi)</h3>
+<ul>
+<li dir="rtl">ފުރަތަމަ ބައި</li>
+<li dir="rtl">ދެވަނަ ބައި <strong>ބޯ ލިޔުން</strong> އަދި <em>ރޮދި ލިޔުން</em></li>
+<li><code>inline</code> ކޯޑު ހިމެނޭ ބައި</li>
+<li dir="rtl">އެކުވެފައިވާ ބައި: hello ދިވެހި مرحبا עולם 123</li>
+</ul>
+<h3 id="md-heading-7">Ordered (Arabic)</h3>
+<ol>
+<li dir="rtl">العنصر الأول في القائمة</li>
+<li dir="rtl">العنصر الثاني مع <strong>نص غامق</strong> و<em>مائل</em></li>
+<li dir="rtl">عنصر مع كود <code>inline</code> في الوسط</li>
+<li dir="rtl">عنصر مختلط: hello ދިވެހި مرحبا עולם 123</li>
+</ol>
+<h3 id="md-heading-8">Unordered (Hebrew)</h3>
+<ul>
+<li dir="rtl">פריט ראשון ברשימה</li>
+<li dir="rtl">פריט שני עם <strong>טקסט מודגש</strong> ו<em>נטוי</em></li>
+<li dir="rtl">פריט עם קוד <code>inline</code> באמצע</li>
+<li dir="rtl">פריט מעורב: hello ދިވެހި مرحبا עולם 123</li>
+</ul>
+<h3 id="md-heading-9">Nested</h3>
+<ul>
+<li>English root
+<ul>
+<li dir="rtl">ދިވެހި ނެސްޓެޑް
+<ul>
+<li dir="rtl">عنصر فرعي بالعربية
+<ul>
+<li dir="rtl">תת-פריט בעברית
+<ul>
+<li>back to English</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li dir="rtl">ދިވެހި މައި
+<ul>
+<li dir="rtl">ހެލޯ</li>
+<li dir="rtl">مرحبا</li>
+<li dir="rtl">שלום</li>
+<li>hello</li>
+</ul>
+</li>
+</ul>
+<h2 id="md-heading-10">6. Blockquotes</h2>
+<blockquote dir="rtl">
+<p dir="rtl">މިއީ ދިވެހި ކޯޓުކެވެ. ކޯޓުގެ ތެރި ރޮނގު ޕެރެގްރާފުގެ ކަނާތު ފަރާތުގައި
+ހުންނަން ޖެހޭނެއެވެ، ވާތު ފަރާތުގައި ނޫނެވެ.</p>
+</blockquote>
+<blockquote dir="rtl">
+<p dir="rtl">هذا اقتباس بالعربية. يجب أن يكون الشريط العمودي للاقتباس على الجانب
+الأيمن من الفقرة، وليس على الجانب الأيسر.</p>
+</blockquote>
+<blockquote dir="rtl">
+<p dir="rtl">זהו ציטוט בעברית. הפס האנכי של הציטוט אמור להיות בצד הימני של הפסקה,
+לא בצד השמאלי, אם הכיוון הוגדר נכון.</p>
+</blockquote>
+<blockquote>
+<p>A plain English blockquote, for comparison — bar on the left.</p>
+</blockquote>
+<h2 id="md-heading-11">7. Tables</h2>
+<table>
+<thead>
+<tr>
+<th>ނަން</th>
+<th>الاسم</th>
+<th>שם</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>އަޙްމަދު</td>
+<td>محمد</td>
+<td>דוד</td>
+<td>Engineer</td>
+</tr>
+<tr>
+<td>ޢާއިޝާ</td>
+<td>سارة</td>
+<td>מרים</td>
+<td>Designer</td>
+</tr>
+<tr>
+<td>ޙަސަން</td>
+<td>علي</td>
+<td>Alex</td>
+<td>PM</td>
+</tr>
+<tr>
+<td>ފާޠިމާ</td>
+<td>فاطمة</td>
+<td>רחל</td>
+<td>Researcher</td>
+</tr>
+<tr>
+<td>އިބްރާހިމް</td>
+<td>إبراهيم</td>
+<td>יוסף</td>
+<td>Team Lead</td>
+</tr>
+</tbody>
+</table>
+<h2 id="md-heading-12">8. Code blocks (should stay LTR even in RTL context)</h2>
+<p dir="rtl">ދިވެހި ޕެރެގްރާފުގެ ތެރޭގައި Python ކޯޑުގެ މިސާލެކެވެ:</p>
+<pre><code class="language-python">greetings = {
+    &quot;dv&quot;: &quot;ހެލޯ&quot;,
+    &quot;ar&quot;: &quot;مرحبا&quot;,
+    &quot;he&quot;: &quot;שלום&quot;,
+    &quot;en&quot;: &quot;Hello&quot;,
+}
+for lang, word in greetings.items():
+    print(f&quot;{lang}: {word}&quot;)
+</code></pre>
+<p dir="rtl">وهذا مثال بلغة JavaScript داخل فقرة عربية:</p>
+<pre><code class="language-javascript">const names = [&quot;ދިވެހި&quot;, &quot;محمد&quot;, &quot;דוד&quot;, &quot;Alex&quot;];
+names.forEach((n) =&gt; console.log(`Hello, ${n}!`));
+</code></pre>
+<p dir="rtl">הנה דוגמה לקוד Swift בתוך פסקה עברית:</p>
+<pre><code class="language-swift">func greet(name: String) -&gt; String {
+    // English comment
+    return &quot;Hello, \(name)!&quot;
+}
+
+// בעברית: greeting בעברית
+let message = greet(name: &quot;עולם&quot;)
+print(message)
+</code></pre>
+<h2 id="md-heading-13">9. Inline formatting torture test</h2>
+<p dir="rtl"><strong>ދިވެހި ބޯ</strong> و<strong>عربي غامق</strong> ו<strong>עברית מודגשת</strong> and <strong>English bold</strong>, mixed
+with <em>ދިވެހި ރޮދި</em> and <em>مائل</em> and <em>נטוי</em> and <em>italic</em>, plus <s>ހުރަސް</s>
+<s>مشطوب</s> <s>יישור</s> <s>strikethrough</s> and <code>ކޯޑު</code> and <code>كود</code> and <code>קוד</code> and
+<code>code</code>.</p>
+<p>A line with <a href="https://example.com">ދިވެހި ލިންކު</a>,
+<a href="https://example.com">رابط بالعربية</a>, <a href="https://example.com">קישור בעברית</a>,
+and <a href="https://example.com">English link</a>.</p>
+<h2 id="md-heading-14">10. Numbers, punctuation, and edge cases</h2>
+<ul>
+<li>Phone number in Dhivehi sentence: 7774444 އަށް ގުޅާލާށެވެ.</li>
+<li>Phone number in Arabic sentence: اتصل بـ 05-9876543 من فضلك.</li>
+<li>Phone number in Hebrew sentence: התקשרו אל 03-1234567 בבקשה.</li>
+<li>Mixed quotes: one said &quot;ހެލޯ&quot;, another replied &quot;مرحبا&quot;, a third said
+&quot;שלום&quot;, and they all said &quot;hi&quot;.</li>
+<li>Parentheses around RTL: (ދިވެހި ބުރެކެޓުގެ ތެރޭ) and (عربية بين قوسين)
+and (עברית בסוגריים) and (English).</li>
+<li>Question marks: ދިވެހި؟ · العربية؟ · עברית? · English?</li>
+<li>Semicolons: ދިވެހި؛ العربية؛ עברית; English;</li>
+<li>Range: 2020–2026 inside ދިވެހި, inside العربية, and inside עברית.</li>
+</ul>
+<h2 id="md-heading-15">11. Headings of every level</h2>
+<h1 id="md-heading-16">H1 — ބޮޑު ސުރުޚީ — العنوان الرئيسي — כותרת ראשית</h1>
+<h2 id="md-heading-17">H2 — ތަންވެ ސުރުޚީ — العنوان الفرعي — כותרת משנה</h2>
+<h3 id="md-heading-18">H3 — ކުޑަ ސުރުޚީ — عنوان فرعي — תת-כותרת</h3>
+<h4 id="md-heading-19">H4 — ބައި — قسم — סעיף</h4>
+<h5 id="md-heading-20">H5 — ކުޑަ ބައި — قسم فرعي — תת-סעיף</h5>
+<h6 id="md-heading-21">H6 — ނޯޓު — ملاحظة — הערה</h6>
+<h2 id="md-heading-22">12. A paragraph with a forced LTR run</h2>
+<p>Even when surrounded by ދިވެހި and العربية and עברית, identifiers like
+<code>MarkdownPreview.app</code> and URLs like <a href="https://github.com/example/repo">https://github.com/example/repo</a>
+and version strings like <code>v1.2.3-rc.4</code> should remain left-to-right and
+readable.</p>
+<h2 id="md-heading-23">13. Long Dhivehi paragraph for word-wrap</h2>
+<p dir="rtl">ދިވެހި ބަސް އަކީ ރާއްޖޭގެ ޤައުމީ ބަސް ކަމުގައިވާ، ތާނަ އަކުރުން ކަނާތުން
+ވާތަށް ލިޔެވޭ ބަހެކެވެ. މި ޕެރެގްރާފަކީ ވަރަށް ދިގު ޖުމްލައެއް ހިމެނޭ، ތާނަ
+އަކުރުގެ ވިއްސާރަ، ފިލި، އަދި ނިޝާންތައް އެކުލެވޭ ބަހުގެ ތެރޭގައި ލައިން
+ރެޕިން ކިހިނެއް މަސައްކަތް ކުރޭތޯ ބެލުމަށް ހަދާފައިވާ ޓެސްޓެކެވެ.</p>
+<h2 id="md-heading-24">14. Long Arabic paragraph for word-wrap</h2>
+<p dir="rtl">في البدء خلق الله السماوات والأرض — وهذه جملة طويلة بشكل خاص تحتوي على
+تشكيل كامل وعلامات اقتباس وشرطات، لاختبار كيفية تعامل آلية التفاف
+الأسطر مع النص العربي الذي يحتوي على علامات خاصة يجب أن تبقى متصلة
+بالحرف الذي تنتمي إليه.</p>
+<h2 id="md-heading-25">15. Long Hebrew paragraph for word-wrap</h2>
+<p dir="rtl">ספר בראשית מתחיל במילים &quot;בְּרֵאשִׁית בָּרָא אֱלֹהִים אֵת הַשָּׁמַיִם וְאֵת
+הָאָרֶץ&quot; — זוהי שורה ארוכה במיוחד שכוללת ניקוד מלא, גרשיים, ומקפים, כדי
+לבדוק כיצד מנגנון גלישת השורות מתמודד עם טקסט עברי עם סימנים מיוחדים
+שאמורים להישאר מחוברים לאות שלהם.</p>
+<hr>
+<p>End — ނިމުނީ — النهاية — סוף</p>

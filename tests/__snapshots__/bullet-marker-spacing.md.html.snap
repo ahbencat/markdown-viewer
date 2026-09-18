@@ -1,0 +1,32 @@
+<h1 id="md-heading-0">Bullet marker spacing</h1>
+<p>Each marker should be round, vertically centered, and visibly separated from the first letter at every text size and with every document font.</p>
+<p>&lt;details open&gt;
+&lt;summary&gt;&lt;strong&gt;Expanded details with a Markdown list&lt;/strong&gt;&lt;/summary&gt;</p>
+<ul>
+<li><a href="../README.md">Every linked item needs a clear marker gap.</a></li>
+<li>Run <code>inline code</code> after the marker without touching it.</li>
+<li>One item wraps onto a second line so its continuation stays aligned with the first letter rather than the marker or the page edge. This sentence is deliberately long enough to wrap in a normal document window.</li>
+<li>Never let an uppercase vertical stroke merge with the marker.</li>
+<li>New files and proportional fonts should behave alike.</li>
+<li>Tests: punctuation immediately after the first word should not matter.</li>
+<li>Non-public methods provide a hyphenated first word.</li>
+<li>Comments begin with a round letter.</li>
+<li>Exact values include <code>--mdp-list-gap</code> and other code.</li>
+</ul>
+<p>&lt;/details&gt;</p>
+<ul>
+<li>Parent item
+<ul>
+<li>Nested item beginning with a vertical stroke</li>
+<li>Another nested item that wraps onto a second line so nested continuation alignment is easy to inspect at a glance in the preview.</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>Ordered markers remain right-aligned.</li>
+<li>Ordered list text keeps the same visual gap.</li>
+</ol>
+<ul>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="">An unchecked task keeps its checkbox gap.</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="" checked="">A checked task keeps its checkbox gap.</li>
+</ul>

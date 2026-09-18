@@ -127,7 +127,8 @@ body {
 }
 
 .mdp-preview .markdown-body {
-  max-width: 820px;
+  /* Column width comes from document.css (820px, ported from the macOS
+     contentColumnWidth). Kept in sync deliberately — do not diverge. */
   margin: 0 auto;
 }
 

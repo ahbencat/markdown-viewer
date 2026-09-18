@@ -1,0 +1,238 @@
+<h1 id="md-heading-0">Sample Markdown Cheat Sheet</h1>
+<p>This is a sample markdown file to help you write Markdown quickly :)</p>
+<p>If you use the fabulous <a href="http://sublimetext.com">Sublime Text 2/3 editor</a> along with the <a href="https://github.com/revolunet/sublimetext-markdown-preview">Markdown Preview plugin</a>, open your ST2 Palette with <code>CMD+⇧+P</code> then choose <code>Markdown Preview in browser</code> to see the result in your browser.</p>
+<h2 id="md-heading-1">Text basics</h2>
+<p>this is <em>italic</em> and this is <strong>bold</strong> .  another <em>italic</em> and another <strong>bold</strong></p>
+<p>this is <code>important</code> text. and percentage signs : % and <code>%</code></p>
+<p>This is a paragraph with a footnote (builtin parser only). <sup class="footnote-ref"><a id="fnref-1" href="#fn-1" aria-label="Footnote 1">1</a></sup></p>
+<p>Insert <code>[ TOC ]</code> without spaces to generate a table of contents (builtin parsers only).</p>
+<h2 id="md-heading-2">Indentation</h2>
+<blockquote>
+<p>Here is some indented text</p>
+<blockquote>
+<p>even more indented</p>
+</blockquote>
+</blockquote>
+<h2 id="md-heading-3">Titles</h2>
+<h1 id="md-heading-4">Big title (h1)</h1>
+<h2 id="md-heading-5">Middle title (h2)</h2>
+<h3 id="md-heading-6">Smaller title (h3)</h3>
+<h4 id="md-heading-7">and so on (hX)</h4>
+<h5 id="md-heading-8">and so on (hX)</h5>
+<h6 id="md-heading-9">and so on (hX)</h6>
+<h2 id="md-heading-10">Example lists (1)</h2>
+<ul>
+<li>
+<p>bullets can be <code>-</code>, <code>+</code>, or <code>*</code></p>
+</li>
+<li>
+<p>bullet list 1</p>
+</li>
+<li>
+<p>bullet list 2</p>
+<ul>
+<li>
+<p>sub item 1</p>
+</li>
+<li>
+<p>sub item 2</p>
+<p>with indented text inside</p>
+</li>
+</ul>
+</li>
+<li>
+<p>bullet list 3</p>
+</li>
+</ul>
+<ul>
+<li>bullet list 4</li>
+</ul>
+<ul>
+<li>bullet list 5</li>
+</ul>
+<h2 id="md-heading-11">Links</h2>
+<p>This is an <a href="http://lmgtfy.com/">example inline link</a> and <a href="http://lmgtfy.com/" title="Hello, world">another one with a title</a>.</p>
+<p>Links can also be reference based : <a href="http://revolunet.com">reference 1</a> or <a href="http://revolunet.com" title="rich web apps">reference 2 with title</a>.</p>
+<p>References are usually placed at the bottom of the document</p>
+<h2 id="md-heading-12">Images</h2>
+<p>A sample image :</p>
+<p><img src="http://www.revolunet.com/static/parisjs8/img/logo-revolunet-carre.jpg" alt="revolunet logo" title="revolunet logo"></p>
+<p>As links, images can also use references instead of inline links :</p>
+<p><img src="http://www.revolunet.com/static/parisjs8/img/logo-revolunet-carre.jpg" alt="revolunet logo" title="revolunet logo"></p>
+<h2 id="md-heading-13">Code</h2>
+<p>It's quite easy to show code in markdown files.</p>
+<p>Backticks can be used to <code>highlight</code> some words.</p>
+<p>Also, any indented block is considered a code block.  If <code>enable_highlight</code> is <code>true</code>, syntax highlighting will be included (for the builtin parser - the github parser does this automatically).</p>
+<pre><code>&lt;script&gt;
+    document.location = 'http://lmgtfy.com/?q=markdown+cheat+sheet';
+&lt;/script&gt;
+</code></pre>
+<h2 id="md-heading-14">Math</h2>
+<p>Math can be displayed in the browser using MathJax or Katex. The feature can be enabled by correctly configuring the <code>&quot;js&quot;</code>, <code>&quot;css&quot;</code>, and <code>&quot;markdown_extensions&quot;</code> configuration fields. This allows for inline math to be included \(\frac{\pi}{2}\) <span class="math math-inline"><span class="math math-inline">\pi</span></span>.</p>
+<p>Alternatively, math can be written on its own line:</p>
+<div class="math math-display"><div class="math math-display">F(\omega) = \frac{1}{\sqrt{2\pi}} \int_{-\infty}^{\infty} f(t) \, e^{ - i \omega t}dt</div></div>
+<div class="math math-display"><div class="math math-display">\int_0^1 f(t) \mathrm{d}t</div></div>
+<div class="math math-display"><div class="math math-display">\sum_j \gamma_j^2/d_j</div></div>
+<h2 id="md-heading-15">GitHub Flavored Markdown</h2>
+<p>If you use the Github parser, you can use some of <a href="https://help.github.com/articles/github-flavored-markdown/">Github Flavored Markdown</a> syntax :</p>
+<ul>
+<li>User/Project@SHA: revolunet/sublimetext-markdown-preview@7da61badeda468b5019869d11000307e07e07401</li>
+<li>User/Project#Issue: revolunet/sublimetext-markdown-preview#1</li>
+<li>User : @revolunet</li>
+</ul>
+<p>Some Python code :</p>
+<pre><code class="language-python">import random
+
+class CardGame(object):
+    &quot;&quot;&quot; a sample python class &quot;&quot;&quot;
+    NB_CARDS = 32
+    def __init__(self, cards=5):
+        self.cards = random.sample(range(self.NB_CARDS), 5)
+        print 'ready to play'
+</code></pre>
+<p>Some Javascript code :</p>
+<pre><code class="language-js">var config = {
+    duration: 5,
+    comment: 'WTF'
+}
+// callbacks beauty un action
+async_call('/path/to/api', function(json) {
+    another_call(json, function(result2) {
+        another_another_call(result2, function(result3) {
+            another_another_another_call(result3, function(result4) {
+                alert('And if all went well, i got my result :)');
+            });
+        });
+    });
+})
+</code></pre>
+<p>The Github Markdown also brings some <a href="http://www.emoji-cheat-sheet.com/">nice Emoji support</a> : :+1: :heart: :beer:</p>
+<h2 id="md-heading-16">Parsers and Extensions</h2>
+<p>Markdown Preview comes with <strong>Python-Markdown</strong> preloaded.</p>
+<h3 id="md-heading-17"><em>Python-Markdown</em></h3>
+<p>The <a href="https://github.com/Python-Markdown/markdown">Python-Markdown Parser</a> provides support for several extensions.</p>
+<h4 id="md-heading-18">Extra Extensions</h4>
+<ul>
+<li><code>abbr</code> -- <a href="https://python-markdown.github.io/extensions/abbreviations">Abbreviations</a></li>
+<li><code>attr_list</code> -- <a href="https://python-markdown.github.io/extensions/attr_list">Attribute Lists</a></li>
+<li><code>def_list</code> -- <a href="https://python-markdown.github.io/extensions/definition_lists">Definition Lists</a></li>
+<li><code>fenced_code</code> -- <a href="https://python-markdown.github.io/extensions/fenced_code_blocks">Fenced Code Blocks</a></li>
+<li><code>footnotes</code> -- <a href="https://python-markdown.github.io/extensions/footnotes">Footnotes</a></li>
+<li><code>tables</code> -- <a href="https://python-markdown.github.io/extensions/tables">Tables</a></li>
+<li><code>smart_strong</code> -- <a href="https://python-markdown.github.io/extensions/smart_strong">Smart Strong</a></li>
+</ul>
+<p>You can enable them all at once using the <code>extra</code> keyword.</p>
+<pre><code>extensions: [ 'extra' ]
+</code></pre>
+<p>If you want all the extras plus the <code>toc</code> extension,
+your settings would look like this:</p>
+<pre><code>{
+    ...
+    parser: 'markdown',
+    extensions: ['extra', 'toc'],
+    ...
+}
+</code></pre>
+<h4 id="md-heading-19">Other Extensions</h4>
+<p>There are also some extensions that are not included in Markdown Extra
+but come in the standard Python-Markdown library.</p>
+<ul>
+<li><code>code-hilite</code> -- <a href="https://python-markdown.github.io/extensions/code_hilite">CodeHilite</a></li>
+<li><code>header-id</code> -- <a href="https://python-markdown.github.io/extensions/header_id">HeaderId</a></li>
+<li><code>meta_data</code> -- <a href="https://python-markdown.github.io/extensions/meta_data">Meta-Data</a></li>
+<li><code>nl2br</code> -- <a href="https://python-markdown.github.io/extensions/nl2br">New Line to Break</a></li>
+<li><code>sane_lists</code> -- <a href="https://python-markdown.github.io/extensions/sane_lists">Sane Lists</a></li>
+<li><code>smarty</code> -- <a href="hhttps://python-markdown.github.io/extensions/smarty">Smarty</a></li>
+<li><code>toc</code> -- <a href="https://python-markdown.github.io/extensions/toc">Table of Contents</a></li>
+<li><code>wikilinks</code> -- <a href="https://python-markdown.github.io/extensions/wikilinks">WikiLinks</a></li>
+</ul>
+<h4 id="md-heading-20">3rd Party Extensions</h4>
+<p><em>Python-Markdown</em> is designed to be extended.</p>
+<p>Some included ones are:</p>
+<ul>
+<li><code>delete</code> -- github style delte support via <code>~~word~~</code></li>
+<li><code>githubemoji</code> --  github emoji support</li>
+<li><code>tasklist</code> -- github style tasklists</li>
+<li><code>magiclink</code> -- github style auto link conversion of http|ftp links</li>
+<li><code>headeranchor</code> -- github style header anchor links</li>
+<li><code>github</code> -- Adds the above extensions in one shot</li>
+<li><code>b64</code> -- convert and embed local images to base64.  Setup by adding this <code>b64(base_path=${BASE_PATH})</code></li>
+</ul>
+<p>There are also a number of others available:</p>
+<p>Just fork this repo and add your extensions inside the <code>.../Packages/Markdown Preview/markdown/extensions/</code> folder.</p>
+<p>Check out the list of <a href="https://github.com/waylan/Python-Markdown/wiki/Third-Party-Extensions">3rd Party extensions</a>.</p>
+<h4 id="md-heading-21">Default Extensions</h4>
+<p>The default extensions are:</p>
+<ul>
+<li><code>footnotes</code> -- <a href="https://python-markdown.github.io/extensions/footnotes">Footnotes</a></li>
+<li><code>toc</code> -- <a href="https://python-markdown.github.io/extensions/toc">Table of Contents</a></li>
+<li><code>fenced_code</code> -- <a href="https://python-markdown.github.io/extensions/fenced_code_blocks">Fenced Code Blocks</a></li>
+<li><code>tables</code> -- <a href="https://python-markdown.github.io/extensions/tables">Tables</a></li>
+</ul>
+<p>Use the <code>default</code> keyword, to select them all.
+If you want all the defaults plus the <code>definition_lists</code> extension,
+your settings would look like this:</p>
+<pre><code>{
+    ...
+    parser: 'markdown',
+    extensions: ['default', 'definition_lists'],
+    ...
+}
+</code></pre>
+<h2 id="md-heading-22">Examples</h2>
+<h3 id="md-heading-23">Tables</h3>
+<p>The <code>tables</code> extension of the <em>Python-Markdown</em> parser is activated by default,
+but is currently <strong>not</strong> available in <em>Markdown2</em>.</p>
+<p>The syntax was adopted from the <a href="http://michelf.ca/projects/php-markdown/extra/#table">php markdown project</a>,
+and is also used in github flavoured markdown.</p>
+<table>
+<thead>
+<tr>
+<th>Year</th>
+<th>Temperature (low)</th>
+<th>Temperature (high)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1900</td>
+<td>-10</td>
+<td>25</td>
+</tr>
+<tr>
+<td>1910</td>
+<td>-15</td>
+<td>30</td>
+</tr>
+<tr>
+<td>1920</td>
+<td>-10</td>
+<td>32</td>
+</tr>
+</tbody>
+</table>
+<h3 id="md-heading-24">Wiki Tables</h3>
+<p>If you are using <em>Markdown2</em> with the <code>wiki-tables</code> extra activated you should see a table below:</p>
+<p>|| <em>Year</em> || <em>Temperature (low)</em> || <em>Temperature (high)</em> ||<br>
+||   1900 ||                 -10 ||                   25 ||<br>
+||   1910 ||                 -15 ||                   30 ||<br>
+||   1920 ||                 -10 ||                   32 ||</p>
+<h3 id="md-heading-25">Definition Lists</h3>
+<p>This example requires <em>Python Markdown</em>'s <code>def_list</code> extension.</p>
+<p>Apple
+:   Pomaceous fruit of plants of the genus Malus in
+the family Rosaceae.</p>
+<p>Orange
+:   The fruit of an evergreen tree of the genus Citrus.</p>
+<h2 id="md-heading-26">About</h2>
+<p>This plugin and this sample file is proudly brought to you by the <a href="http://revolunet.com">revolunet team</a></p>
+
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>This is the text of the note. <span class="footnote-backrefs"><a href="#fnref-1" class="footnote-backref" aria-label="Back to reference 1">&#8617;</a></span></p>
+
+</li>
+</ol>
+</section>

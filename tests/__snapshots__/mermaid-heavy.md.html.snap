@@ -1,0 +1,381 @@
+<h1 id="md-heading-0">Order Processing Platform — Architecture Notes</h1>
+<p>This document describes the order processing platform end to end: ingestion,
+validation, fulfilment, and reporting. It intentionally leans on diagrams so
+that every subsystem has a picture next to its prose. It doubles as a stress
+test for the preview renderer — Mermaid, code highlighting, and math all
+appear below.</p>
+<h2 id="md-heading-1">1. System overview</h2>
+<p>Orders arrive over HTTPS, are validated, priced, and dispatched to a
+fulfilment queue. The happy path takes under 300 ms at the median; the tail
+is dominated by payment authorization.</p>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+flowchart TD
+    A[Client] --&gt;|POST /orders| B(API Gateway)
+    B --&gt; C{Valid schema?}
+    C --&gt;|yes| D[Order Service]
+    C --&gt;|no| E[400 Bad Request]
+    D --&gt; F[(Orders DB)]
+    D --&gt; G[[Pricing Engine]]
+    G --&gt; H{In stock?}
+    H --&gt;|yes| I[Fulfilment Queue]
+    H --&gt;|no| J[Backorder Queue]
+    I --&gt; K[Warehouse Worker]
+    J --&gt; K
+    K --&gt; L([Shipped])
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>
+<p>The gateway terminates TLS and applies per-tenant rate limits. Everything
+downstream of the Order Service is asynchronous.</p>
+<h2 id="md-heading-2">2. Order placement sequence</h2>
+<p>The critical path involves four services. Payment authorization is the only
+synchronous external call.</p>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+sequenceDiagram
+    autonumber
+    participant C as Client
+    participant G as Gateway
+    participant O as OrderSvc
+    participant P as PaymentSvc
+    participant Q as Queue
+    C-&gt;&gt;G: POST /orders
+    G-&gt;&gt;O: forward (traced)
+    O-&gt;&gt;P: authorize(card, amount)
+    P--&gt;&gt;O: auth token
+    O-&gt;&gt;Q: enqueue(fulfilment)
+    O--&gt;&gt;G: 201 Created
+    G--&gt;&gt;C: order id + ETA
+    Note over O,P: p99 here is 180 ms —&lt;br/&gt;the platform's dominant latency
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>
+<h2 id="md-heading-3">3. Domain model</h2>
+<p>The core aggregate is <code>Order</code>; everything else hangs off it.</p>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+classDiagram
+    class Order {
+        +UUID id
+        +OrderStatus status
+        +Money total
+        +place()
+        +cancel()
+    }
+    class LineItem {
+        +SKU sku
+        +int quantity
+        +Money unitPrice
+    }
+    class Customer {
+        +UUID id
+        +String email
+        +loyaltyTier() Tier
+    }
+    class Shipment {
+        +TrackingId tracking
+        +ship()
+    }
+    Order &quot;1&quot; *-- &quot;1..*&quot; LineItem
+    Customer &quot;1&quot; o-- &quot;0..*&quot; Order
+    Order &quot;1&quot; --&gt; &quot;0..1&quot; Shipment
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>
+<h2 id="md-heading-4">4. Order lifecycle</h2>
+<p>Status transitions are strictly forward except for the cancellation edges.</p>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+stateDiagram-v2
+    [*] --&gt; Draft
+    Draft --&gt; Placed: submit
+    Placed --&gt; Paid: payment ok
+    Placed --&gt; Cancelled: payment failed
+    Paid --&gt; Fulfilling: picked up
+    Fulfilling --&gt; Shipped: handed to carrier
+    Fulfilling --&gt; Cancelled: out of stock
+    Shipped --&gt; Delivered
+    Delivered --&gt; [*]
+    Cancelled --&gt; [*]
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>
+<h2 id="md-heading-5">5. Delivery milestones</h2>
+<p>The Q3 rollout is sequenced so the queue migration lands before peak season.</p>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+gantt
+    title Q3 rollout
+    dateFormat YYYY-MM-DD
+    section Platform
+        Queue migration        :a1, 2026-07-01, 21d
+        Idempotency keys       :a2, after a1, 14d
+    section Fulfilment
+        Warehouse API v2       :b1, 2026-07-10, 30d
+        Carrier webhooks       :b2, after b1, 10d
+    section Hardening
+        Load test              :c1, after a2, 7d
+        Chaos drill            :c2, after c1, 5d
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>
+<h2 id="md-heading-6">6. Traffic mix</h2>
+<p>Read traffic dwarfs writes, which shapes the caching strategy.</p>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+pie title Requests by endpoint (last 30 days)
+    &quot;GET /orders/:id&quot; : 46
+    &quot;GET /orders&quot; : 27
+    &quot;POST /orders&quot; : 14
+    &quot;PATCH /orders/:id&quot; : 8
+    &quot;DELETE /orders/:id&quot; : 5
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>
+<h2 id="md-heading-7">7. Storage schema</h2>
+<p>The relational core stays small; large payloads live in object storage.</p>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    ORDER ||--|{ LINE_ITEM : contains
+    ORDER ||--o| SHIPMENT : &quot;ships as&quot;
+    PRODUCT ||--o{ LINE_ITEM : &quot;referenced by&quot;
+    CUSTOMER {
+        uuid id PK
+        string email
+        string tier
+    }
+    ORDER {
+        uuid id PK
+        uuid customer_id FK
+        string status
+        int total_cents
+    }
+    LINE_ITEM {
+        uuid order_id FK
+        string sku
+        int quantity
+    }
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>
+<h2 id="md-heading-8">8. Customer journey</h2>
+<p>Support tickets cluster around the payment step, which matches the journey
+scores below.</p>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+journey
+    title Checkout experience
+    section Browse
+        Find product: 6: Customer
+        Compare options: 5: Customer
+    section Buy
+        Add to cart: 6: Customer
+        Enter payment: 3: Customer
+        Confirm order: 4: Customer
+    section After
+        Track shipment: 5: Customer, Support
+        Receive package: 7: Customer
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>
+<h2 id="md-heading-9">9. Deployment topology</h2>
+<p>Each region runs the full stack; cross-region traffic is replication only.</p>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+flowchart LR
+    subgraph us-east
+        LB1[ALB] --&gt; S1[app x6]
+        S1 --&gt; DB1[(primary)]
+    end
+    subgraph eu-west
+        LB2[ALB] --&gt; S2[app x4]
+        S2 --&gt; DB2[(replica)]
+    end
+    DB1 -. async repl .-&gt; DB2
+    CDN{{CDN}} --&gt; LB1
+    CDN --&gt; LB2
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>
+<h2 id="md-heading-10">10. Incident escalation</h2>
+<p>Paging follows severity; only SEV-1 wakes the on-call manager.</p>
+<figure class="mermaid-figure" tabindex="0" role="img" aria-label="Mermaid diagram">
+<div class="mermaid-stage"><div class="mermaid">
+flowchart TD
+    A([Alert fires]) --&gt; B{Severity?}
+    B --&gt;|SEV-1| C[Page primary + manager]
+    B --&gt;|SEV-2| D[Page primary]
+    B --&gt;|SEV-3| E[Ticket only]
+    C --&gt; F[War room]
+    D --&gt; G{Ack in 5 min?}
+    G --&gt;|no| C
+    G --&gt;|yes| H[Investigate]
+    F --&gt; H
+    H --&gt; I([Postmortem])
+
+</div></div>
+<div class="mermaid-hud" aria-hidden="true">
+<div class="mermaid-hud-group mermaid-hud-zoom">
+<button type="button" class="mermaid-hud-btn" data-mm-act="out" tabindex="-1" aria-label="Zoom Out">−</button>
+<button type="button" class="mermaid-hud-btn mermaid-hud-level" data-mm-act="reset" tabindex="-1" aria-label="Reset zoom">100%</button>
+<button type="button" class="mermaid-hud-btn" data-mm-act="in" tabindex="-1" aria-label="Zoom In">+</button>
+</div>
+<div class="mermaid-hud-group mermaid-hud-actions">
+<button type="button" class="mermaid-hud-btn mermaid-hud-width" data-mm-act="width" tabindex="-1" aria-label="Fill width" aria-pressed="false" title="Fill width"><span class="mermaid-hud-width-symbol" aria-hidden="true">⤢</span></button>
+
+</div>
+</div>
+</figure>
+<h2 id="md-heading-11">Appendix A: Client snippet</h2>
+<p>The Swift client retries idempotently using the server-issued key:</p>
+<pre><code class="language-swift">struct OrderClient {
+    let session: URLSession
+    let idempotencyKey: UUID
+
+    func place(_ order: OrderDraft) async throws -&gt; OrderReceipt {
+        var request = URLRequest(url: endpoint.appending(path: &quot;orders&quot;))
+        request.httpMethod = &quot;POST&quot;
+        request.setValue(idempotencyKey.uuidString,
+                         forHTTPHeaderField: &quot;Idempotency-Key&quot;)
+        request.httpBody = try JSONEncoder().encode(order)
+        let (data, response) = try await session.data(for: request)
+        guard (response as? HTTPURLResponse)?.statusCode == 201 else {
+            throw OrderError.rejected
+        }
+        return try JSONDecoder().decode(OrderReceipt.self, from: data)
+    }
+}
+</code></pre>
+<p>The TypeScript worker drains the fulfilment queue in batches:</p>
+<pre><code class="language-typescript">async function drain(queue: Queue&lt;OrderEvent&gt;, batchSize = 32): Promise&lt;void&gt; {
+  while (true) {
+    const events = await queue.take(batchSize, { waitMs: 500 });
+    if (events.length === 0) continue;
+    const results = await Promise.allSettled(events.map(fulfil));
+    for (const [i, r] of results.entries()) {
+      if (r.status === &quot;rejected&quot;) await queue.deadLetter(events[i], r.reason);
+    }
+  }
+}
+</code></pre>
+<p>Operators replay dead letters with a one-liner:</p>
+<pre><code class="language-bash">for id in $(dlq list --queue fulfilment --format ids); do
+  dlq replay &quot;$id&quot; &amp;&amp; echo &quot;replayed $id&quot;
+done
+</code></pre>
+<h2 id="md-heading-12">Appendix B: Capacity math</h2>
+<p>Peak load is provisioned from the queueing model. With arrival rate
+<span class="math math-inline"><span class="math math-inline">\lambda = 420</span></span> req/s and per-worker service rate <span class="math math-inline"><span class="math math-inline">\mu = 55</span></span> req/s, the
+utilization per worker is <span class="math math-inline"><span class="math math-inline">\rho = \lambda / (c \mu)</span></span> for <span class="math math-inline"><span class="math math-inline">c</span></span> workers.</p>
+<p>Expected wait in an M/M/c queue:</p>
+<div class="math math-display"><div class="math math-display">
+W_q = \frac{C(c, \lambda/\mu)}{c\mu - \lambda}
+\qquad
+C(c, a) = \frac{\dfrac{a^c}{c!}\,\dfrac{c}{c-a}}
+               {\sum_{k=0}^{c-1} \dfrac{a^k}{k!} + \dfrac{a^c}{c!}\,\dfrac{c}{c-a}}
+</div></div>
+<p>With <span class="math math-inline"><span class="math math-inline">c = 10</span></span> workers, <span class="math math-inline"><span class="math math-inline">\rho \approx 0.76</span></span> and <span class="math math-inline"><span class="math math-inline">W_q &lt; 12</span></span> ms, which leaves
+headroom for a single-AZ failure (<span class="math math-inline"><span class="math math-inline">c = 7</span></span>, <span class="math math-inline"><span class="math math-inline">\rho \approx 0.99</span></span> — too hot, so
+the fleet floor is 12).</p>

@@ -1,0 +1,11 @@
+<section class="md-frontmatter" data-source-line="1" data-source-start="1" data-source-end="5">
+<table><tbody>
+<tr><th scope="row" dir="auto">title</th><td dir="auto">TOML Frontmatter Test</td></tr>
+<tr><th scope="row" dir="auto">date</th><td dir="auto">2026-05-21</td></tr>
+<tr><th scope="row" dir="auto">tags</th><td dir="auto"><span class="md-fm-pill" dir="auto">markdown</span><span class="md-fm-pill" dir="auto">frontmatter</span><span class="md-fm-pill" dir="auto">toml</span></td></tr>
+</tbody></table>
+</section>
+
+<h1 id="md-heading-0">TOML Frontmatter Test</h1>
+<p>The TOML frontmatter block above should not render in the preview.</p>
+<p>If the fix is working, this heading is the first visible content.</p>

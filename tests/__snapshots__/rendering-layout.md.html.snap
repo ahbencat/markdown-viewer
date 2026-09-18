@@ -1,0 +1,77 @@
+<h1 id="md-heading-0">A clearer reading rhythm</h1>
+<p>A reading view should make <strong>structure</strong> easy to scan while keeping ordinary paragraphs comfortable. Inline <code>code</code> belongs on the same baseline as the surrounding text.</p>
+<h2 id="md-heading-1">A heading with <code>inline code</code> that stays readable when it wraps onto a second line</h2>
+<p>Headings need enough line height for two lines, with a predictable gap before the next paragraph. This sample compares typography, spacing, and alignment.</p>
+<ul>
+<li>A short list item</li>
+<li>A longer item that wraps naturally and keeps its continuation aligned with the first word rather than the bullet marker.
+<ul>
+<li>A nested item with its own consistent indent</li>
+<li>Another nested item</li>
+</ul>
+</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="" checked="">A completed task</li>
+<li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="">A task that can still be checked</li>
+</ul>
+<blockquote>
+<p>A quotation with <strong>emphasis</strong> and a softly rounded rule.</p>
+<p>A second paragraph inside the same quotation.</p>
+</blockquote>
+<pre><code class="language-swift">struct Preview {
+    let title: String
+    let isReadable = true
+}
+</code></pre>
+<h2 id="md-heading-2">Tables keep their alignment</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Document</th>
+<th style="text-align:center">Status</th>
+<th style="text-align:right">Size</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Short note</td>
+<td style="text-align:center">Ready</td>
+<td style="text-align:right">12</td>
+</tr>
+<tr>
+<td style="text-align:left">Longer document with a wrapped title</td>
+<td style="text-align:center">Ready</td>
+<td style="text-align:right">1,024</td>
+</tr>
+<tr>
+<td style="text-align:left">Unicode: café 日本語 🧪</td>
+<td style="text-align:center">Review</td>
+<td style="text-align:right">256</td>
+</tr>
+</tbody>
+</table>
+<h3 id="md-heading-3">Smaller headings still form a hierarchy</h3>
+<p>Inline math remains available: <span class="math math-inline"><span class="math math-inline">E = mc^2</span></span>. Footnotes still belong to the reading experience.<sup class="footnote-ref"><a id="fnref-1" href="#fn-1" aria-label="Footnote 1">1</a></sup></p>
+<h4 id="md-heading-4">Extra authored blank lines remain intentional</h4>
+<p>A paragraph before two blank lines.</p>
+<p>A paragraph after two blank lines.</p>
+<h2 id="md-heading-5">Right-to-left content</h2>
+<p>&lt;div dir=&quot;rtl&quot;&gt;</p>
+<p dir="rtl">هذه فقرة لاختبار المحاذاة والمسافات بين السطور.</p>
+<ul>
+<li dir="rtl">العنصر الأول</li>
+<li dir="rtl">العنصر الثاني</li>
+</ul>
+<blockquote dir="rtl">
+<p dir="rtl">اقتباس لاختبار موضع الخط الجانبي.</p>
+</blockquote>
+<p>&lt;/div&gt;</p>
+
+<section class="footnotes" role="doc-endnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>This note uses our existing Markdown pipeline. <span class="footnote-backrefs"><a href="#fnref-1" class="footnote-backref" aria-label="Back to reference 1">&#8617;</a></span></p>
+
+</li>
+</ol>
+</section>
