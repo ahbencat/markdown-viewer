@@ -1,7 +1,7 @@
 {
   "name": "md-view-win",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lightweight Markdown preview for Windows — open .md, render beautifully, export to PDF. Fully offline KaTeX, Mermaid and syntax highlighting.",
   "main": "index.js",
   "scripts": {
     "test": "vitest run",
@@ -9,9 +9,20 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "markdown-preview",
+    "markdown",
+    "tauri",
+    "windows",
+    "webview2",
+    "katex",
+    "mermaid",
+    "pdf-export",
+    "offline-first",
+    "markdown-it"
+  ],
+  "author": "ahben",
+  "license": "MIT",
   "type": "module",
   "devDependencies": {
     "@tauri-apps/api": "^2.11.1",
