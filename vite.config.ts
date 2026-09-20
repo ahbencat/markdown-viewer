@@ -8,4 +8,12 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["markdown-it-footnote"],
   },
+  server: {
+    watch: {
+      // cargo holds target/debug/*.exe open while compiling; letting vite
+      // watch src-tauri makes the watcher hit EBUSY on Windows and kills
+      // `cargo tauri dev` via a non-zero beforeDevCommand exit.
+      ignored: ["**/src-tauri/**"],
+    },
+  },
 });
