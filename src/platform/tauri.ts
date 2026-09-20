@@ -9,26 +9,82 @@ export function isTauri(): boolean {
   );
 }
 
-/** Open a .md file. In Tauri: native dialog + readTextFile.
- * In a plain browser: file input picker. */
+/** Extensions treated as Markdown throughout open dialog, drop and picker. */
+export const MARKDOWN_EXTENSIONS = [
+  "md",
+  "markdown",
+  "mdown",
+  "mkd",
+  "mkdn",
+  "mdx",
+  "txt",
+];
+
+/** True when the path (or file name) ends with a Markdown extension. */
+export function isMarkdownPath(path: string): boolean {
+  const base = path.split(/[/\\]/).pop() ?? path;
+  const dot = base.lastIndexOf(".");
+  if (dot === -1) return false;
+  return MARKDOWN_EXTENSIONS.includes(base.slice(dot + 1).toLowerCase());
+}
+
 export async function openMarkdownFile(): Promise<OpenedDocument | null> {
   if (isTauri()) {
     const { open } = await import("@tauri-apps/plugin-dialog");
-    const { readTextFile } = await import("@tauri-apps/plugin-fs");
     const selected = await open({
       multiple: false,
       filters: [
         {
           name: "Markdown",
-          extensions: ["md", "markdown", "mdown", "mkd", "mkdn", "mdx", "txt"],
+          extensions: [...MARKDOWN_EXTENSIONS],
         },
       ],
     });
     if (typeof selected !== "string" || selected === "") return null;
-    const markdown = await readTextFile(selected);
-    return { path: selected, markdown: stripBom(normalizeNewlines(markdown)) };
+    return readPathFile(selected);
   }
   return openViaFileInput();
+}
+
+/** Read a filesystem path via the Tauri fs plugin (dialog, native drop). */
+export async function readPathFile(path: string): Promise<OpenedDocument> {
+  const { readTextFile } = await import("@tauri-apps/plugin-fs");
+  const markdown = await readTextFile(path);
+  return { path, markdown: stripBom(normalizeNewlines(markdown)) };
+}
+
+export type NativeDropEvent =
+  | { type: "enter"; paths: string[] }
+  | { type: "over" }
+  | { type: "drop"; paths: string[] }
+  | { type: "leave" };
+
+/** Subscribe to native OS file drops (Tauri only). Resolves to unlisten. */
+export async function onNativeDrop(
+  handler: (event: NativeDropEvent) => void,
+): Promise<() => void> {
+  const { getCurrentWebview } = await import("@tauri-apps/api/webview");
+  return getCurrentWebview().onDragDropEvent((event) => {
+    const payload = event.payload as
+      | { type: "enter"; paths: string[] }
+      | { type: "over" }
+      | { type: "drop"; paths: string[] }
+      | { type: "leave" };
+    switch (payload.type) {
+      case "enter":
+        handler({ type: "enter", paths: payload.paths });
+        break;
+      case "over":
+        handler({ type: "over" });
+        break;
+      case "drop":
+        handler({ type: "drop", paths: payload.paths });
+        break;
+      case "leave":
+        handler({ type: "leave" });
+        break;
+    }
+  });
 }
 
 function openViaFileInput(): Promise<OpenedDocument | null> {

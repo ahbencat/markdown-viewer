@@ -2,9 +2,13 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { renderMarkdown } from "./renderer";
 import { detectLanguage, highlightLanguage, parseCodeFenceInfo } from "./renderer/highlight";
 import {
+  MARKDOWN_EXTENSIONS,
+  isMarkdownPath,
   isTauri,
+  onNativeDrop,
   openMarkdownFile,
   readDroppedFile,
+  readPathFile,
 } from "./platform/tauri";
 import {
   ensureHighlight,
@@ -30,11 +34,16 @@ const SAMPLE_FILES = [
   "navigation.md",
 ];
 
+const UNSUPPORTED_FILE_MESSAGE = `Only Markdown files (${MARKDOWN_EXTENSIONS.map(
+  (ext) => `.${ext}`,
+).join(", ")}) can be previewed.`;
+
 export function App() {
   const [doc, setDoc] = useState<OpenedDocument | null>(null);
   const [rendered, setRendered] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [rendering, setRendering] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const articleRef = useRef<HTMLElement>(null);
 
   const renderDoc = useCallback(async (markdown: string) => {
@@ -129,16 +138,68 @@ export function App() {
     void exportPdf();
   }, []);
 
-  // HTML5 drag-drop fallback (Tauri drag-drop events hook in later).
+  // Native OS file drop in Tauri (paths from the OS), HTML5 fallback
+  // in a plain browser. Tauri consumes the OS drop itself on Windows,
+  // so the HTML5 listeners stay browser-only to avoid double handling.
   useEffect(() => {
+    if (isTauri()) {
+      let unlisten: (() => void) | undefined;
+      let cancelled = false;
+      void onNativeDrop((event) => {
+        switch (event.type) {
+          case "enter":
+            if (event.paths.some((p) => isMarkdownPath(p))) {
+              setDragging(true);
+            }
+            break;
+          case "leave":
+            setDragging(false);
+            break;
+          case "drop": {
+            setDragging(false);
+            const target = event.paths.find((p) => isMarkdownPath(p));
+            if (!target) {
+              setError(UNSUPPORTED_FILE_MESSAGE);
+              return;
+            }
+            void readPathFile(target)
+              .then((opened) => {
+                setDoc(opened);
+                void renderDoc(opened.markdown);
+              })
+              .catch((err: unknown) => {
+                setError(err instanceof Error ? err.message : String(err));
+              });
+            break;
+          }
+          case "over":
+            break;
+        }
+      }).then((stop) => {
+        if (cancelled) stop();
+        else unlisten = stop;
+      });
+      return () => {
+        cancelled = true;
+        unlisten?.();
+      };
+    }
     const onDrop = (ev: DragEvent) => {
       ev.preventDefault();
       const file = ev.dataTransfer?.files?.[0];
       if (!file) return;
-      void readDroppedFile(file).then((opened) => {
-        setDoc(opened);
-        void renderDoc(opened.markdown);
-      });
+      if (!isMarkdownPath(file.name)) {
+        setError(UNSUPPORTED_FILE_MESSAGE);
+        return;
+      }
+      void readDroppedFile(file)
+        .then((opened) => {
+          setDoc(opened);
+          void renderDoc(opened.markdown);
+        })
+        .catch((err: unknown) => {
+          setError(err instanceof Error ? err.message : String(err));
+        });
     };
     const onDragOver = (ev: DragEvent) => ev.preventDefault();
     window.addEventListener("drop", onDrop);
@@ -197,6 +258,11 @@ export function App() {
         </div>
       </header>
       {error !== null && <div className="mdp-error">{error}</div>}
+      {dragging && (
+        <div className="mdp-drop-overlay">
+          <span>Drop a Markdown file to preview it</span>
+        </div>
+      )}
       {empty ? (
         <main className="mdp-empty">
           <p>
