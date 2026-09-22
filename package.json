@@ -1,6 +1,6 @@
 {
   "name": "md-view-win",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lightweight Markdown preview for Windows — open .md, render beautifully, export to PDF. Fully offline KaTeX, Mermaid and syntax highlighting.",
   "main": "index.js",
   "scripts": {
