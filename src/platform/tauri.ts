@@ -1,6 +1,7 @@
 // File-open abstraction: Tauri (dialog + fs plugins) with a browser
 // fallback for Linux `npm run dev` where no Rust backend exists.
 
+import { invoke } from "@tauri-apps/api/core";
 import type { OpenedDocument } from "../types";
 
 export function isTauri(): boolean {
@@ -26,6 +27,12 @@ export function isMarkdownPath(path: string): boolean {
   const dot = base.lastIndexOf(".");
   if (dot === -1) return false;
   return MARKDOWN_EXTENSIONS.includes(base.slice(dot + 1).toLowerCase());
+}
+
+/** Return the Markdown path passed by Windows when the app was launched by association. */
+export async function getLaunchFile(): Promise<string | null> {
+  if (!isTauri()) return null;
+  return invoke<string | null>("get_launch_file");
 }
 
 export async function openMarkdownFile(): Promise<OpenedDocument | null> {

@@ -3,6 +3,7 @@ import { renderMarkdown } from "./renderer";
 import { detectLanguage, highlightLanguage, parseCodeFenceInfo } from "./renderer/highlight";
 import {
   MARKDOWN_EXTENSIONS,
+  getLaunchFile,
   isMarkdownPath,
   isTauri,
   onNativeDrop,
@@ -143,6 +144,18 @@ export function App() {
   // so the HTML5 listeners stay browser-only to avoid double handling.
   useEffect(() => {
     if (isTauri()) {
+      void getLaunchFile()
+        .then((path) => {
+          if (!path || !isMarkdownPath(path)) return;
+          return readPathFile(path).then((opened) => {
+            setDoc(opened);
+            void renderDoc(opened.markdown);
+          });
+        })
+        .catch((err: unknown) => {
+          setError(err instanceof Error ? err.message : String(err));
+        });
+
       let unlisten: (() => void) | undefined;
       let cancelled = false;
       void onNativeDrop((event) => {
