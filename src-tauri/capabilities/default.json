@@ -6,6 +6,10 @@
   "permissions": [
     "core:default",
     "dialog:allow-open",
-    "fs:allow-read-text-file"
+    "fs:allow-read-text-file",
+    {
+      "identifier": "fs:scope",
+      "allow": ["$DOCUMENT/**/*", "$DESKTOP/**/*", "$DOWNLOAD/**/*", "$HOME/**/*"]
+    }
   ]
 }
