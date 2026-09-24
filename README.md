@@ -12,7 +12,6 @@ This is a Windows port of the macOS app [pluk-inc/markdown-preview](https://gith
   <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%2010%2F11-blue" />
   <img alt="Tauri" src="https://img.shields.io/badge/tauri-2.x-teal" />
   <img alt="License" src="https://img.shields.io/badge/license-MIT-green" />
-  <a href="https://buymeacoffee.com/ahben"><img alt="Buy Me a Coffee" src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?&logo=buy-me-a-coffee&logoColor=black" /></a>
 </p>
 
 - Upstream original: [pluk-inc/markdown-preview](https://github.com/pluk-inc/markdown-preview) (native macOS app, Swift/AppKit/WKWebView)
@@ -72,14 +71,6 @@ The render pipeline (`src/renderer/`) mirrors macOS `MarkdownHTML` module by mod
 ## Not yet supported (beyond MVP)
 
 Edit mode, in-page search, outline sidebar, custom themes, autosave / file watching, recent files, auto-update, HTML/PNG export, localized UI.
-
-## Support
-
-If this app saves you time, you can buy me a coffee ☕
-
-<p align="center">
-  <img src="qr-code.png" alt="Buy Me a Coffee QR code" width="220" />
-</p>
 
 ## Credits
 

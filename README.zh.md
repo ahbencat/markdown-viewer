@@ -12,7 +12,6 @@ Windows 平台的 Markdown 预览应用，基于 [Tauri 2](https://tauri.app/) �
   <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%2010%2F11-blue" />
   <img alt="Tauri" src="https://img.shields.io/badge/tauri-2.x-teal" />
   <img alt="License" src="https://img.shields.io/badge/license-MIT-green" />
-  <a href="https://buymeacoffee.com/ahben"><img alt="Buy Me a Coffee" src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?&logo=buy-me-a-coffee&logoColor=black" /></a>
 </p>
 
 ## 功能特性
@@ -68,14 +67,6 @@ npm run build    # 仅构建前端（不是 tauri build）
 ## 暂不支持（MVP 之外）
 
 编辑模式、页内搜索、大纲侧边栏、主题自定义、自动保存 / 文件监视、最近文件、自动更新、HTML/PNG 导出、多语言界面。
-
-## 支持作者
-
-如果这个应用帮你节省了时间，可以请我喝杯咖啡 ☕
-
-<p align="center">
-  <img src="qr-code.png" alt="Buy Me a Coffee 收款码" width="220" />
-</p>
 
 ## 致谢
 
