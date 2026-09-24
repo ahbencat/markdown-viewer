@@ -12,6 +12,7 @@ Windows 平台的 Markdown 预览应用，基于 [Tauri 2](https://tauri.app/) �
   <img alt="Platform" src="https://img.shields.io/badge/platform-Windows%2010%2F11-blue" />
   <img alt="Tauri" src="https://img.shields.io/badge/tauri-2.x-teal" />
   <img alt="License" src="https://img.shields.io/badge/license-MIT-green" />
+  <a href="https://buymeacoffee.com/ahben"><img alt="Buy Me a Coffee" src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-ffdd00?&logo=buy-me-a-coffee&logoColor=black" /></a>
 </p>
 
 ## 功能特性
