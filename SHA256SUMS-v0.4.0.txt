@@ -1,0 +1,2 @@
+70e805e53ddfecedae3777a6671456ec5058a4d0012450220ac56c140568fb70 *src-tauri/target/release/bundle/msi/md-view-win_0.4.0_x64_en-US.msi
+a0e50c3dfa25ad9a8fb9deb2445a0b052e7491a74ee7747ed06df1cd2084121f *src-tauri/target/release/bundle/nsis/md-view-win_0.4.0_x64-setup.exe
