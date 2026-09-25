@@ -3,6 +3,7 @@ import { renderMarkdown } from "./renderer";
 import { detectLanguage, highlightLanguage, parseCodeFenceInfo } from "./renderer/highlight";
 import {
   MARKDOWN_EXTENSIONS,
+  classifyImageSrc,
   getLaunchFile,
   isMarkdownPath,
   isTauri,
@@ -10,6 +11,7 @@ import {
   openMarkdownFile,
   readDroppedFile,
   readPathFile,
+  resolveLocalImageSrc,
 } from "./platform/tauri";
 import {
   ensureHighlight,
@@ -229,6 +231,31 @@ export function App() {
   useEffect(() => {
     if (articleRef.current) {
       articleRef.current.innerHTML = rendered;
+      // Local images (`./img/a.png`, `D:\pics\b.png`) must go through the
+      // asset protocol: WebView2 refuses file:// subresources from a
+      // tauri:// page, and relative srcs have no base to resolve against.
+      if (isTauri() && doc !== null) {
+        const docPath = doc.path;
+        const imgs = articleRef.current.querySelectorAll("img[src]");
+        void Promise.all(
+          Array.from(imgs).map(async (img) => {
+            const raw = img.getAttribute("src");
+            if (raw === null) return;
+            const kind = classifyImageSrc(raw);
+            if (kind === "remote" || kind === "data") return;
+            try {
+              img.setAttribute(
+                "src",
+                await resolveLocalImageSrc(raw, docPath),
+              );
+            } catch {
+              // Leave the broken src in place — the alt text still shows.
+            }
+          }),
+        ).catch(() => {
+          // Aggregate failure is non-fatal; per-image errors handled above.
+        });
+      }
       if (rendered !== "") {
         const enhance = () => {
           renderMath();
@@ -251,7 +278,7 @@ export function App() {
       }
     }
     return undefined;
-  }, [rendered]);
+  }, [doc, rendered]);
 
   const empty = doc === null;
 
