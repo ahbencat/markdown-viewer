@@ -28,7 +28,13 @@ This is a Windows port of the macOS app [pluk-inc/markdown-preview](https://gith
 
 ## Install (end users)
 
-Build the installer on a Windows machine (requires the Rust toolchain):
+Download a ready-made installer from [GitHub Releases](https://github.com/ahbencat/md-view-win/releases/latest) — no build tools needed. Grab the latest `md-view-win_…_x64_en-US.msi` or `md-view-win_…_x64-setup.exe` and run it: the installer registers `.md` file associations, adds Start menu entries, and sets up uninstall. A `SHA256SUMS-….txt` with checksums ships alongside each release.
+
+> Note: user machines need the WebView2 Runtime, preinstalled on Win11 and recent Win10. An unsigned build triggers a SmartScreen "unknown publisher" prompt on first install — expected.
+
+## Build from source (developers)
+
+Build the installer yourself on a Windows machine (requires the Rust toolchain):
 
 ```powershell
 winget install Rustlang.Rustup
@@ -38,9 +44,7 @@ cd md-view-win
 cargo tauri build
 ```
 
-Artifacts land in `src-tauri/target/release/bundle/`: distribute the **installer** from `msi/` or `nsis/` (it registers `.md` file associations, Start menu entries, and uninstall). The bare `md-view-win.exe` under `target/release/` also runs standalone, but is not recommended for distribution.
-
-> Note: user machines need the WebView2 Runtime, preinstalled on Win11 and recent Win10. An unsigned build triggers a SmartScreen "unknown publisher" prompt on first install — expected.
+Artifacts land in `src-tauri/target/release/bundle/` (`msi/` and `nsis/`). The bare `md-view-win.exe` under `target/release/` also runs standalone, but is not recommended for distribution.
 
 ## Develop
 

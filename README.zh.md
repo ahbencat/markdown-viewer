@@ -24,7 +24,13 @@ Windows 平台的 Markdown 预览应用，基于 [Tauri 2](https://tauri.app/) �
 
 ## 安装（最终用户）
 
-在 Windows 机器上构建安装包（需要 Rust 工具链）：
+到 [GitHub Releases](https://github.com/ahbencat/md-view-win/releases/latest) 直接下载安装包，无需任何构建工具。选最新版的 `md-view-win_…_x64_en-US.msi` 或 `md-view-win_…_x64-setup.exe` 运行即可：安装包会自动注册 `.md` 文件关联、开始菜单与卸载项，每个 release 附带 SHA256 校验文件（`SHA256SUMS-….txt`）。
+
+> 说明：用户电脑需要 WebView2 Runtime，Win11 与近年 Win10 均已预装。若未签名，首次安装时 SmartScreen 会提示"未知发布者"，属正常现象。
+
+## 从源码构建（开发者）
+
+在 Windows 机器上自行构建安装包（需要 Rust 工具链）：
 
 ```powershell
 winget install Rustlang.Rustup
@@ -34,9 +40,7 @@ cd md-view-win
 cargo tauri build
 ```
 
-构建产物在 `src-tauri/target/release/bundle/`：用 `msi/` 或 `nsis/` 目录下的**安装包**分发给用户（会自动注册 `.md` 文件关联、开始菜单与卸载项）。`target/release/` 下的裸 `md-view-win.exe` 可直接运行，但不推荐单独分发。
-
-> 说明：用户电脑需要 WebView2 Runtime，Win11 与近年 Win10 均已预装。若未签名，首次安装时 SmartScreen 会提示"未知发布者"，属正常现象。
+构建产物在 `src-tauri/target/release/bundle/`（`msi/` 与 `nsis/`）。`target/release/` 下的裸 `md-view-win.exe` 可直接运行，但不推荐单独分发。
 
 ## 开发
 
